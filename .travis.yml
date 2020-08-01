@@ -12,127 +12,26 @@ cache:
 # version tags (which are apparently considered branches by travis)
 branches:
     only:
-        - master
+        - test-arm
         - /\d+\.\d+\.x/
         - /\d+\.\d+(\.\d+)?/
 
 matrix:
     include:
-        - python: 3.8
-          env: TOXENV=pep8
-        # Setting 'python' is just to make travis's UI a bit prettier
-        - python: 3.6
-          env: TOXENV=py36
-          # Travis lists available Pythons (including PyPy) by arch and distro here:
-          # https://docs.travis-ci.com/user/languages/python/#python-versions
-        - python: pypy2.7-7.3.1
-          env: TOXENV=pypy-nocoverage
-          dist: xenial
-        - python: pypy3.6-7.3.1
-          env: TOXENV=pypy3-nocoverage
-        - python: 3.8
-          env: TOXENV=py38 OPENSSL=1.0.2u
         - python: 2.7
-          env: TOXENV=py27 OPENSSL=1.1.0l
-        - python: 2.7
-          env: TOXENV=py27-ssh OPENSSL=1.1.0l
+          dist: focal
+          arch: arm64-graviton2
+          virt: lxd
+          group: edge
+          env: TOXENV=py27
         - python: 3.8
-          env: TOXENV=py38 OPENSSL=1.1.0l
-        - python: 2.7
-          env: TOXENV=py27 OPENSSL=1.1.1g
-        - python: 3.8
-          env: TOXENV=py38 OPENSSL=1.1.1g
-        - python: 3.8
-          env: TOXENV=py38 OPENSSL=1.1.1g OPENSSL_CONFIG_FLAGS="no-engine no-rc2 no-srtp no-ct"
-        - python: 3.8
-          env: TOXENV=py38-ssh OPENSSL=1.1.1g
-        - python: 3.8
-          env: TOXENV=py38 LIBRESSL=2.9.2
-        - python: 3.8
-          env: TOXENV=py38 LIBRESSL=3.0.2
-        - python: 3.8
-          env: TOXENV=py38 LIBRESSL=3.1.2
-        - python: 3.8
-          env: TOXENV=py38 LIBRESSL=3.2.0
-
-        - python: 2.7
-          services: docker
-          env: TOXENV=py27 DOCKER=pyca/cryptography-runner-centos7
-        - python: 2.7
-          services: docker
-          env: TOXENV=py27 DOCKER=pyca/cryptography-runner-centos8
-        - python: 3.6
-          services: docker
-          env: TOXENV=py36 DOCKER=pyca/cryptography-runner-centos8
-        - python: 3.6
-          services: docker
-          env: TOXENV=py36 OPENSSL_FORCE_FIPS_MODE=1 DOCKER=pyca/cryptography-runner-centos8-fips
-        - python: 2.7
-          services: docker
-          env: TOXENV=py27 DOCKER=pyca/cryptography-runner-stretch
-        - python: 3.5
-          services: docker
-          env: TOXENV=py35 DOCKER=pyca/cryptography-runner-stretch
-        - python: 3.7
-          services: docker
-          env: TOXENV=py37 DOCKER=pyca/cryptography-runner-buster
-        - python: 3.8
-          services: docker
-          env: TOXENV=py38 DOCKER=pyca/cryptography-runner-bullseye
-        - python: 3.8
-          services: docker
-          env: TOXENV=py38 DOCKER=pyca/cryptography-runner-sid
-        - python: 2.7
-          services: docker
-          env: TOXENV=py27 DOCKER=pyca/cryptography-runner-ubuntu-rolling
-        - python: 3.8
-          services: docker
-          env: TOXENV=py38 DOCKER=pyca/cryptography-runner-ubuntu-rolling
-        - python: 3.8
-          services: docker
-          env: TOXENV=py38-randomorder DOCKER=pyca/cryptography-runner-ubuntu-rolling
-        - python: 3.8
-          services: docker
-          env: TOXENV=py38 DOCKER=pyca/cryptography-runner-fedora
-        - python: 3.8
-          services: docker
-          env: TOXENV=py38 DOCKER=pyca/cryptography-runner-alpine:latest
-
-        - python: 3.8
-          env: TOXENV=docs OPENSSL=1.1.1g
-          addons:
-              apt:
-                  packages:
-                      - libenchant-dev
-        - python: 2.7
-          services: docker
-          env: TOXENV=docs-linkcheck DOCKER=pyca/cryptography-runner-buster
-          if: (branch = master AND type != pull_request) OR commit_message =~ /linkcheck/
-        - python: 3.8
-          env: TOXENV=packaging
-
-        - python: 2.7
-          env: DOWNSTREAM=pyopenssl
-        - python: 3.7
-          env: DOWNSTREAM=twisted OPENSSL=1.1.1g
-        - python: 2.7
-          env: DOWNSTREAM=paramiko
-        - python: 2.7
-          env: DOWNSTREAM=aws-encryption-sdk
-        - python: 2.7
-          # BOTO_CONFIG works around this boto issue on travis:
-          # https://github.com/boto/boto/issues/3717
-          env: DOWNSTREAM=dynamodb-encryption-sdk BOTO_CONFIG=/dev/null
-        - python: 2.7
-          env: DOWNSTREAM=certbot
-        - python: 2.7
-          env: DOWNSTREAM=certbot-josepy
-        - python: 2.7
-          env: DOWNSTREAM=urllib3
-          # Tests hangs when run under bionic
-          dist: xenial
-
+          dist: focal
+          arch: arm64-graviton2
+          virt: lxd
+          group: edge
+          env: TOXENV=py38
 install:
+    - echo ${uname -m}
     - ./.travis/install.sh
 
 script:
