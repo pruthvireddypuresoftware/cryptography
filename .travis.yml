@@ -31,7 +31,7 @@ matrix:
           group: edge
           env: TOXENV=py38
 install:
-    - echo ${uname -m}
+    - echo `uname -m`
     - ./.travis/install.sh
 
 script:
